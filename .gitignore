@@ -1,0 +1,13 @@
+# Saidas geradas pela ferramenta (nao versionar)
+processos/
+buscas/
+log-pesquisas.jsonl
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Sistema
+.DS_Store
+Thumbs.db

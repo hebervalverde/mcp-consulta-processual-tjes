@@ -1,0 +1,28 @@
+{
+  "_comentario": "Exemplo de hooks do Claude Code para o MCP consulta-processual. Copie o bloco 'hooks' para o seu ~/.claude/settings.json. Ajuste o caminho $HOME/Pesquisa-Processual se voce clonou o repositorio em outro lugar.",
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__consulta-processual__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/Pesquisa-Processual/claude-code/hooks/validar-processo.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__consulta-processual__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/Pesquisa-Processual/claude-code/hooks/registrar-pesquisa.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

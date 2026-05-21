@@ -1,0 +1,34 @@
+#!/bin/sh
+# Git hook (pre-commit): valida a sintaxe dos arquivos Python antes de cada commit.
+#
+# Ative com:  git config core.hooksPath .githooks
+# (o instalar.sh faz isso automaticamente)
+
+arquivos=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
+[ -z "$arquivos" ] && exit 0
+
+falhou=0
+for f in $arquivos; do
+    if ! python3 -m py_compile "$f" 2>/tmp/precommit_err; then
+        echo "Erro de sintaxe Python em: $f"
+        cat /tmp/precommit_err
+        falhou=1
+    fi
+done
+
+if [ "$falhou" -ne 0 ]; then
+    echo ""
+    echo "Commit abortado: corrija os erros de sintaxe acima."
+    exit 1
+fi
+
+# Lint opcional: so roda se o flake8 estiver instalado no ambiente.
+if command -v flake8 >/dev/null 2>&1; then
+    if ! flake8 --max-line-length=100 $arquivos; then
+        echo ""
+        echo "Commit abortado: o flake8 encontrou problemas de estilo."
+        exit 1
+    fi
+fi
+
+exit 0
